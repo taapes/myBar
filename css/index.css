@@ -1,0 +1,19 @@
+
+
+.newBar{
+	margin:0 auto;
+}
+
+.displayBars{
+	margin:0 auto;
+}
+
+.ng-invalid.ng-dirty {
+  border-color: red;
+}
+
+.ng-valid.ng-dirty {
+  border-color: green;
+}
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

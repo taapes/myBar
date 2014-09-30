@@ -1,0 +1,36 @@
+<div ng-controller="MyBarController">
+    <script type="text/ng-template" id="modal.html">
+        <div class="modal-header">
+            <h1 class="modal-title">{{bar.name}}</h1>
+        </div>
+        <div class="modal-body">
+            <h5>Happy Hour Deal:</h5>
+            <p>{{bar.deal}}</p>
+
+            <h5>Hours:</h5>
+
+            <!-- ************TODO: TABLE FORMATTING*************** -->
+            <table class="table table-striped">
+                    <thead>
+                            <tr>
+                                    <th>Day</th>
+                                    <th>Hours</th>
+                                    <th>Happy Hour</th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                    <td>Monday</td>
+                                    <td ng-hide="bar.Monday.isClosed">{{bar.Monday.open | date:'shortTime}} - {{bar.Monday.close | date:'shortTime'}}</td>
+                                    <td ng-show="bar.Monday.isClosed">Closed</td>
+                                    <td ng-hide="bar.Monday.noHH" ng-repeat="hh in bar.Monday.happyHour">{{hh.start | date:'hh:mma'}} - {{hh.end | date:'hh:mma'}}</td>
+                                    <td ng-show="bar.Monday.noHH">No Happy Hour on Monday</td>
+                            </tr>
+                    </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+        </div>
+</script>
+</div>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html ng-app="MyBar">
+	<head>
+		<meta charset="utf-8">
+		<title>myBar</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Happy hours in West Los Angeles, Brentwood and Santa Monica, bars">
+		<meta name="author" content="taapes">
+    
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+	</head>
+  
+	<body ng-controller="MyBarController as myBar">
+		<div class="navbar navbar-inverse navbar-fixed-top">
+		  <div class="navbar-inner">
+			<div class="container">
+			  <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <a class="brand" href="#">myBar</a>
+			  <div class="nav-collapse collapse">
+				<ul class="nav">
+				  <li class="active"><a href="#">Home</a></li>
+				  <li><a href="#about">About</a></li>
+				  <li><a href="#contact">Contact</a></li>
+				  <li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+					  <li><a href="#">Action</a></li>
+					  <li><a href="#">Another action</a></li>
+					  <li><a href="#">Something else here</a></li>
+					  <li class="divider"></li>
+					  <li class="nav-header">Nav header</li>
+					  <li><a href="#">Separated link</a></li>
+					  <li><a href="#">One more separated link</a></li>
+					</ul>
+				  </li>
+				</ul>
+				<form class="navbar-form pull-right">
+				  <input class="span2" type="text" placeholder="Username">
+				  <input class="span2" type="password" placeholder="Password">
+				  <button type="submit" class="btn">Sign in</button>
+				</form>
+			  </div><!--/.nav-collapse -->
+			</div>
+		  </div>
+		</div>
+		
+		<div class="container">
+
+			<div class="hero-unit">
+				<h1>myBar</h1>
+				<br>
+				<br>
+				
+				<p>Are you a bar?  Click to sign up here and manage your myBar account</p>
+				<p><a href="#" class="btn btn-primary btn-large">Sign Up &raquo;</a></p>
+			</div>
+	
+			<br>
+			<div class="newBar">
+			
+				<form name="addNewBar" ng-submit="addNewBar.$valid && addBar()" novalidate > 
+                                        <br>
+					<div class="controls controls-row">
+                                            <input class="span3" ng-model="bar.name" type="text" placeholder="Bar Name" name="name" required/>
+						<input class="span3" ng-model="bar.neighborhood" type="text" placeholder="Neighborhood" name="neighborhood"/> 
+						
+						<select class="span3"  ng-model="bar.atmosphere" ng-options="atmo for atmo in atmosphere" name="atmosphere">
+                                                       <option value="">-- choose atmosphere --</option>
+						</select> 
+						
+						<input type="text" class="span2" placeholder="new atmosphere" ng-model="newAtmo" name="newAtmo" />
+						<button type="button" class="btn btn-success" ng-click="addNewAtmo()">+</button>
+					</div>
+					
+					<div class="controls controls-row">
+						<span class="span6"></span>
+						
+						<select class="span3"  ng-options="t for t in type" ng-model="bar.type" name="type">
+							<option value="">-- choose bar type --</option>
+						</select> 
+						
+						<input type="text" class="span2" placeholder="new type" ng-model="newType" name="newType" />
+						<button type="button" class="btn btn-success" ng-click="addNewType()">+</button>					
+					</div>
+					
+					<div class="controls controls-row">
+						<input class="span3" ng-model="bar.street" type="text" placeholder="Street" name="street" required/>
+						<input class="span3" ng-model="bar.city" type="text" placeholder="City" name="city" required/>
+						<input class="span3" ng-model="bar.state" type="text" placeholder="State" name="state" required/>
+						<input class="span3" ng-model="bar.zip" type="text" placeholder="Zip" name="zip" required/>
+					</div>
+					
+					<div class="controls controls-row">
+						
+						<input class="span3" ng-model="bar.instagram" type="text" placeholder="Instagram handle" name="instagram"/> 
+						<select class="span3" ng-model="bar.price" ng-init="bar.price='$'" name="price" required>
+							<option value="$">$</option>
+							<option value="$$">$$</option>
+							<option value="$$$">$$$</option>
+							<option value="$$$$">$$$$</option>
+						</select> 
+						
+						<textarea class="span6" ng-model="bar.deal" placeholder="HH Deal details" name="deal"></textarea>
+					</div>
+					
+					<div ng-repeat="hours in barHours">
+						<div class="controls controls-row">
+							<div class=span3>
+								Bar Hours:
+							</div>
+							<div class=span3>
+								<span>M T W Th F S Su</span><br>
+								<input ng-model="hours.Monday" type="checkbox" value="Monday" name="Monday" />
+								<input ng-model="hours.Tuesday" type="checkbox" value="Tuesday" name="Tuesday" />
+								<input ng-model="hours.Wednesday" type="checkbox" value="Wednesday" name="Wednesday" />
+								<input ng-model="hours.Thursday" type="checkbox" value="THursday" name="Thursday" />
+								<input ng-model="hours.Friday" type="checkbox" value="Friday" name="Friday" />
+								<input ng-model="hours.Saturday" type="checkbox" value="Saturday" name="Saturday" />
+								<input ng-model="hours.Sunday" type="checkbox" value="Sunday" name="Sunday" />
+							</div>
+							<span>
+								<input class="span2" ng-model="hours.open" type="time" name="open"/>
+								<input class="span2" ng-model="hours.close" type="time" name="close"/> 
+							</span>
+                                                        <button class="btn btn-danger span1" ng-hide="hideminusbar" ng-click="removeBarHours(hours)" type="button">-</button>
+							<button class="btn btn-success span1" ng-show="showAddBarHours(hours)" ng-click="addBarHours()" type="button">+</button>
+							<br>
+						</div>
+					</div>
+					<br>
+					<div ng-repeat="hours in hhHours">
+						<div class="controls controls-row">
+							<div class=span3>
+								Happy Hours:
+							</div>
+							<div class=span3>
+								<span>M T W Th F S Su</span><br>
+								<input ng-model="hours.Monday" type="checkbox" value="Monday" name="Monday" />
+								<input ng-model="hours.Tuesday" type="checkbox" value="Tuesday" name="Tuesday" />
+								<input ng-model="hours.Wednesday" type="checkbox" value="Wednesday" name="Wednesday" />
+								<input ng-model="hours.Thursday" type="checkbox" value="THursday" name="Thursday" />
+								<input ng-model="hours.Friday" type="checkbox" value="Friday" name="Friday" />
+								<input ng-model="hours.Saturday" type="checkbox" value="Saturday" name="Saturday" />
+								<input ng-model="hours.Sunday" type="checkbox" value="Sunday" name="Sunday" />
+							</div>
+							<span>
+								<input class="span2" ng-model="hours.start" type="time" name="start"/>
+								<input class="span2" ng-model="hours.end" type="time" name="end"/> 
+							</span>
+                                                        <button class="btn btn-danger span1" ng-hide="hideminushh" ng-click="removeHHHours(hours)" type="button">-</button>
+							<button class="btn btn-success span1" ng-show="showAddHHHours(hours)" ng-click="addHHHours()" type="button">+</button>
+							<br>
+						</div>
+					</div>
+									
+					<br>
+					<input type="submit" class="btn btn-primary btn-block" value="Submit" />
+			
+				</form>
+			</div>
+		
+			<!--*************** TODO: Pagination ************-->
+			<div class="displayBars">
+			<br>
+				<table class="table">
+					<thead>
+						<tr>
+							<th><a href="" ng-click="predicate = 'name'; reverse=false">Name</a></th>
+							<th><a href="" ng-click="predicate = 'neighborhood'; reverse=false">Neighborhood</a></th>
+							<th><a href="" ng-click="predicate = 'price'; reverse=false">Price</a></th>
+							<th><a href="" ng-click="predicate = 'deal'; reverse=false">Deal</a></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="newbar in Bars">
+							<td><a ng-click="open(newbar)" >{{newbar.name}}</a></td>
+							<td>{{newbar.neighborhood}}</td>
+							<td>{{newbar.price}}</td>
+							<td>{{newbar.deal}}</td>
+							<td class="span1"> <button class="btn-inverse" ng-click="editBar(newbar)" type="button">Edit</button></td>
+							<td class="span1"> <button class="btn-danger" ng-click="removeBar(newbar)" type="button">Remove</button></td>
+						</tr>
+					<tbody>
+				</table>
+			
+			</div>
+			
+			<br><br><br>
+			
+			<footer>
+				<p>SUP DOOD!</p>
+			</footer>
+		
+		</div> <!-- Container Div -->
+		
+		
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+                <script type="text/javascript" src="js/ui-bootstrap-tpls-0.11.2.js"></script>
+		
+		<!--
+		<script src="/js/jquery.js"></script>
+		<script src="/js/bootstrap-transition.js"></script>
+		<script src="/js/bootstrap-alert.js"></script>
+		<script src="/js/bootstrap-modal.js"></script>
+		<script src="/js/bootstrap-dropdown.js"></script>
+		<script src="/js/bootstrap-scrollspy.js"></script>
+		<script src="/js/bootstrap-tab.js"></script>
+		<script src="/js/bootstrap-tooltip.js"></script>
+		<script src="/js/bootstrap-popover.js"></script>
+		<script src="/js/bootstrap-button.js"></script>
+		<script src="/js/bootstrap-collapse.js"></script>
+		<script src="/js/bootstrap-carousel.js"></script>
+		<script src="/js/bootstrap-typeahead.js"></script>
+                  -->
+		
+	</body>
+	
+</html>
