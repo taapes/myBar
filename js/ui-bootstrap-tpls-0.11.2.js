@@ -1,7 +1,6 @@
 /*
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
-
  * Version: 0.11.2 - 2014-09-26
  * License: MIT
  */
@@ -3079,7 +3078,6 @@ angular.module('ui.bootstrap.tabs', [])
         { title:"Dynamic Title 1", content:"Dynamic Item 0" },
         { title:"Dynamic Title 2", content:"Dynamic Item 1", disabled: true }
       ];
-
       $scope.alertMe = function() {
         setTimeout(function() {
           alert("You've selected the alert tab!");
