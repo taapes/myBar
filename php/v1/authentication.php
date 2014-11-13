@@ -64,18 +64,23 @@ $app->post('/signUp', function() use ($app) {
     if(!$isUserExists){
         $r->user->password = passwordHash::hash($password);
         $tabble_name = "users_auth";
-        $column_names = array('username', 'name', 'email', 'password');
+        $column_names = array('username', 'email', 'name', 'password');
         $result = $db->insertIntoTable($r->user, $column_names, $tabble_name);
         if ($result != NULL) {
-            $response["status"] = "success";
-            $response["message"] = "User account created successfully for: ".$name;
-            $response["uid"] = $result;
-            if (!isset($_SESSION)) {
-                session_start();
-            }
-            $_SESSION['uid'] = $response["uid"];
-            $_SESSION['name'] = $name;
-            $_SESSION['username'] = $username;
+            $response['status'] = "success";
+			$response['message'] = $name.' Signed up successfully.';
+			$response['name'] = $name;
+			$response['email'] = $email;
+			$response['username'] = $username;
+			$response['admin'] = false;
+			$response['uid'] = "";
+			if (!isset($_SESSION)) {
+				session_start();
+			}
+			$_SESSION['uid'] = "";
+			$_SESSION['username'] = $username;
+			$_SESSION['name'] = $name;
+			$_SESSION['admin'] = $response['admin'];
             echoResponse(200, $response);
         } else {
             $response["status"] = "error";

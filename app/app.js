@@ -1,18 +1,18 @@
 'use strict';
 
 (function() {
-    var app = angular.module('MyBar', ['ngRoute', 'toaster', 'ui.bootstrap', 'angularUtils.directives.dirPagination', /*'google-maps'.ns(),*/ ]);
-    
+    var app = angular.module('MyBar', ['ngRoute', 'toaster', 'ui.bootstrap', 'angularUtils.directives.dirPagination' /*'google-maps'.ns()*/]);
+
     /*
-    app.config(['GoogleMapApiProvider'.ns(), function (GoogleMapApi) {
-        GoogleMapApi.configure({
-            key: 'AIzaSyByqBJd7Rr_GEQDEzT9l5aZUfFJngHtoEs',
-            v: '3.17',
-            libraries: 'weather,geometry,visualization'
-        });
-    }]);
-    */
-    
+     app.config(['GoogleMapApiProvider'.ns(), function (GoogleMapApi) {
+     GoogleMapApi.configure({
+     key: 'AIzaSyByqBJd7Rr_GEQDEzT9l5aZUfFJngHtoEs',
+     v: '3.17',
+     libraries: 'weather,geometry,visualization'
+     });
+     }]);
+     */
+
     app.config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.
@@ -64,13 +64,13 @@
                         redirectTo: '/myBar'
                     });
         }]);
-    
+
     app.run(function($rootScope, $location, Data, $routeParams) {
-    	$rootScope.testsys = false;
+        $rootScope.testsys = true;
         $rootScope.$on("$routeChangeStart", function(event, next, current) {
             $rootScope.authenticated = false;
             Data.get('session').then(function(results) {
-                if (results.uid) {
+                if (results.username) {
                     $rootScope.authenticated = true;
                     $rootScope.uid = results.uid;
                     $rootScope.name = results.name;
@@ -101,7 +101,7 @@
             });
         });
     });
-    
+
     app.controller('authCtrl', function($scope, $rootScope, $routeParams, $location, $http, Data) {
         //initially set those objects to null to avoid undefined error
 
@@ -113,7 +113,7 @@
             }).then(function(results) {
                 Data.toast(results);
 
-                if (results.status == "success") {
+                if (results.status === "success") {
                     $scope.login = {};
                     $rootScope.authenticated = true;
                     $rootScope.uid = results.uid;
@@ -127,13 +127,13 @@
         $scope.account = function(username) {
             $location.url('/account/' + username);
         };
-        $scope.signup = {email: '', password: '', name: '', username: ''};
+        $scope.signup = {username: '', email: '', name: '', password: ''};
         $scope.signUp = function(user) {
             Data.post('signUp', {
                 user: user
             }).then(function(results) {
                 Data.toast(results);
-                if (results.status == "success") {
+                if (results.status === "success") {
 
                     $location.path('myBar');
                 }
@@ -155,7 +155,7 @@
     app.controller('AccountController', ['$http', '$scope', '$log', "$location", function($http, $scope, $log, $location) {
 
         }]); //AccountController
-    
+
     app.controller('AllBarsController', ['$http', '$scope', '$log', "$location", function($http, $scope, $log, $location) {
             $scope.Bars = [];
             $scope.totalBars = 0;
@@ -1060,23 +1060,24 @@
     app.controller('ViewBarController', ['$scope', '$http', '$routeParams', '$location', 'toaster', '$rootScope', function($scope, $http, $routeParams, $location, toaster, $rootScope) {
             $scope.show = true;
             $scope.bar = {}
-            $scope.isReadonly = false;            
-            $scope.newReviews = {rating: 3, comment: "", timestamp: 0, user: ""}; 
+            $scope.isReadonly = false;
+            $scope.newReviews = {rating: 3, comment: "", timestamp: 0, user: ""};
             $scope.max = 5;
-            $scope.noReviews=false;
-            
+            $scope.noReviews = false;
+
             //Google$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
-            
+
             $scope.pageSize = 10;
             $scope.currentPage = 1;
-            
+
             var data = $routeParams.barName;
-            
+
             $http.post('/php/getBar.php', data)
                     .success(function(response, status, headers, config)
                     {
                         if (response.success === 0) {
                             $scope.show = false;
+                            console.info(response.data);
                         }
                         else
                         {
@@ -1091,44 +1092,44 @@
                         console.log(response.message);
                         $scope.show = false;
                     });
-              
-            /*GoogleMapApi.then(function(maps) {
 
-        	});      
-            */
-            
-			$scope.pop = function(type, title, message) {
+            /*GoogleMapApi.then(function(maps) {
+             
+             });      
+             */
+
+            $scope.pop = function(type, title, message) {
                 toaster.pop(type, title, message);
-            };   
-            
-            $scope.removeReview = function(review){
-            	var index = ($scope.currentPage - 1) * $scope.pageSize + review;
-            	console.info(index);
-            	$scope.bar.reviews.splice(index, 1);
-            	$http.post('/php/editBar.php', $scope.bar)
+            };
+
+            $scope.removeReview = function(review) {
+                var index = ($scope.currentPage - 1) * $scope.pageSize + review;
+                console.info(index);
+                $scope.bar.reviews.splice(index, 1);
+                $http.post('/php/editBar.php', $scope.bar)
                         .success(function(response, status, headers, config)
                         {
                             if (response.success === 0) {
                                 $scope.pop('error', "Error!", "Failed to Remove, please try again");
-                                
+
                             }
                             else if (response.success === 1) {
                                 $scope.pop('success', "SUCCESS!", "Review removed!");
-                                
+
                             }
-                            
+
                         })
                         .error(function(data, status)
                         {
                             $scope.pop('error', "Error!", "OOPS! Something went wrong!\n" + data);
                             console.log('error');
                         });
-            }         
+            }
 
             $scope.pageChangeHandler = function(num) {
                 console.log('meals page changed to ' + num);
             };
-            
+
             $scope.editBar = function(newBar) {
                 var name = newBar.name;
                 $location.url('/editBar/' + name);
@@ -1138,23 +1139,23 @@
                 $scope.overStar = value;
                 $scope.percent = 100 * (value / $scope.max);
             };
-            
-            $scope.addReview = function(){
-            	$scope.newReviews.timestamp = Date.now();
-            	$scope.newReviews.user = $rootScope.username;
+
+            $scope.addReview = function() {
+                $scope.newReviews.timestamp = Date.now();
+                $scope.newReviews.user = $rootScope.username;
                 $scope.bar.reviews.unshift($scope.newReviews);
                 $http.post('/php/editBar.php', $scope.bar)
                         .success(function(response, status, headers, config)
                         {
                             if (response.success === 0) {
                                 $scope.pop('error', "Error!", "Review failed, please try again");
-                                
+
                             }
                             else if (response.success === 1) {
                                 $scope.pop('success', "SUCCESS!", "Review added!");
-                                $scope.newReviews = {rating: 3, comment: "", timestamp: 0, user: $rootScope.username}; 
+                                $scope.newReviews = {rating: 3, comment: "", timestamp: 0, user: $rootScope.username};
                             }
-                            
+
                         })
                         .error(function(data, status)
                         {
@@ -1162,7 +1163,7 @@
                             console.log('error');
                         });
             };
-            
+
         }]); //ViewBarController
 
     app.factory("Data", ['$http', 'toaster',
@@ -1266,7 +1267,7 @@
             };
         }]);
 
-    app.filter('tel', function() {
+	app.filter('tel', function() {
         return function(tel) {
             if (!tel) {
                 return '';

@@ -88,4 +88,8 @@
 	height: 400px; 
 }
 
+.bar-deal {
+    word-wrap:break-word;
+}
+
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

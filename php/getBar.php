@@ -19,7 +19,7 @@ if (isset($data)) {
         
         $response["message"] = "Bar not found!";
         foreach ($result as $row) {
-            if(json_decode($row["json"])->name == $data){
+            if(mysql_real_escape_string(json_decode($row["json"])->name) == $data){
                 $response["bar"] = json_decode($row["json"]);
                 $response["success"] = 1;
                 $response["message"] = "Bar Found!";
