@@ -1,0 +1,23 @@
+<div>
+	<form>
+		<table class='table'>
+			<tr>
+				<th>Name</th>
+				<th>Username</th>
+				<th>Email</th>
+				<th>Created Date</th>
+				<th>Admin</th>
+				<th>Remove</th>
+			</tr>
+			<tr ng-repeat="user in Users">
+				<td>{{user.name}}</td>
+				<td>{{user.username}}</td>
+				<td>{{user.email}}</td>
+				<td>{{user.created | date:'short'}}</td>
+				<td><input type="text" ng-model="user.admin" size="2" ><button class="btn btn-primary btn-sm" ng-click="update(user.username, user.admin)">Update</button></td>
+				<td><button class="btn btn-danger btn-sm" ng-click="remove(user.username)">X</button></td>
+			</tr>
+		</table>
+		
+	</form>
+</div>

@@ -1,0 +1,70 @@
+<div class="allBars" >
+    <ul >
+        <li class="bar-list-item" dir-paginate="bar in Bars | itemsPerPage: barsPerPage" total-items="totalBars" current-page="pagination.current">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-5">
+                    <div class="col-md-2 barpic">
+                        <a href="/#/viewBar/{{bar.name}}">
+                            <img alt="{{bar.name}}" height="90" ng-src="/uploads/{{bar.id}}/{{bar.thumb}}" width="90">
+                        </a>
+                    </div>
+                    <div class="col-md-8">
+                        <a class="h3" href="/#/viewBar/{{bar.name}}" >{{bar.name}}</a>
+                        <div>
+                            <div>
+                                <rating ng-model="bar.rating" max="max" readonly="true" state-on="'beerfull'" state-off="'beerempty'"></rating>
+                            </div>
+                            <span class="">
+                                {{bar.reviewcount}}
+                            </span>
+                        </div>
+                        <div class="">
+
+                            <span class="">{{bar.price}}</span>
+                            <span ng-repeat="ty in bar.type">
+                                <a href="" class="titlecaps">{{ty}}</a>    
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <address class="titlecaps">
+                        <strong class="titlecaps">{{bar.neighborhood}}</strong> <br>
+                        <br>
+                        {{bar.street}} <br>
+                        {{bar.city}}, {{bar.state}} {{bar.zip}} <br>
+                        {{bar.phonenum| tel}}
+                    </address>
+
+
+                </div>
+                <div class="col-md-1" ng-show="admin>0">
+                    <button class="btn btn-danger" ng-click="removeBar(bar.id)" >Delete</button>
+                    <button class="btn btn-warning" ng-click="editBar(bar.name)" >Edit</button>
+                </div>
+                <!--<div class="snippet-block review-snippet">
+                    <div class="media-block">
+                        <div class="media-avatar">
+                            <div class="photo-box pb-30s" >
+                                <a href="">
+                                    <img alt="" class="photo-box-img" height="30" src="" width="30">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="media-story">
+                            <p class="snippet">{{bar.review}}</p>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+
+        </li>
+    </ul>
+    <div class="text-center">
+        <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/views/dirPagination.tpl.html"></dir-pagination-controls>
+    </div>
+</div>
+
+

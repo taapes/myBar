@@ -1,0 +1,47 @@
+<?php
+$response["success"] = 0;
+$response["message"] = "Unknown Error!";
+$con = mysqli_connect("localhost","root","root","myBar");
+
+if (mysqli_connect_errno()) {
+	$response["success"] = 0;
+    $response["message"] = "Failed to connect to MySQL: " . mysqli_connect_error();
+}
+
+$id = file_get_contents("php://input");
+$id = json_decode($id);
+$id = $id->id;
+$response["id"] = $id;
+
+
+//******* TODO: NEED ERROR CHECK******
+$response["success"] = 1;
+$response["message"] = "Bar removed successfully";
+if (!($stmt = $con->prepare("DELETE FROM Bars WHERE id = ?"))){
+	$response["message"] = "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    $response["success"] = 0;
+}
+if(!$stmt->bind_param("s", $id)){
+	$response["message"] = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+    $response["success"] = 0;
+}
+if(!$stmt->execute()){
+    $response["message"] = "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+    $response["success"] = 0;
+}
+
+$stmt->close();
+$path = dirname( __DIR__ ) . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . (string)$id;
+$response["img"] = "files not found";
+if(file_exists($path)){
+	$response["img"] = "files found ".$path;
+	system('/bin/rm -rf ' . escapeshellarg($path));
+}
+
+$response = json_encode($response);
+echo $response;
+
+mysqli_close($con);
+
+
+?>
